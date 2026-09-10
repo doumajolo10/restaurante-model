@@ -97,7 +97,8 @@ header{position:sticky; top:0; z-index:30; background:rgba(20,16,14,.82); backdr
 #menu,.sec,.scroller{min-width:0; max-width:100%}
 
 /* ===== seções e itens ===== */
-.sec{padding:26px 0 8px; scroll-margin-top:124px}
+.sec{padding:26px 0 8px}
+#menu{padding-bottom:34vh}
 .sec-h{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:14px}
 .sec-h h2{font-size:1.35rem}
 .sec-h span{font-size:13px; color:var(--mut)}
@@ -138,6 +139,10 @@ header{position:sticky; top:0; z-index:30; background:rgba(20,16,14,.82); backdr
 .combo.in .qb{display:grid}
 .combo .eco{position:absolute; left:12px; top:12px; background:var(--ember); color:#fff; font-family:var(--f-d); font-size:10.5px; font-weight:800; padding:6px 9px; border-radius:8px}
 .empty-search{padding:30px 0; color:var(--mut); text-align:center; display:none}
+.again{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 16px; border-radius:var(--r); background:linear-gradient(135deg,var(--ember-soft),transparent 70%), var(--sur); border:1px solid var(--line2)}
+.again b{display:block; font-family:var(--f-d); font-size:14px; margin:4px 0 2px}
+.again span{display:block; font-size:12.5px; color:var(--mut)}
+@media (max-width:560px){ .again{flex-direction:column; align-items:stretch} .again .btn{width:100%} }
 
 /* ===== carrinho (lateral e sheet) ===== */
 .cart-side{position:sticky; top:132px}
@@ -479,15 +484,21 @@ function qtyOf(id){ return cart.filter(function(c){return c.id===id;}).reduce(fu
 function cardHtml(it){
   var q=qtyOf(it.id);
   return '<button type="button" class="item'+(q?" in":"")+'" data-open="'+it.id+'">'+(it.tag?'<span class="tg'+(it.tag==="Novo"?" novo":"")+'">'+esc(it.tag)+'</span>':"")+'<span class="qb">'+q+'x</span>'+
-    '<span><span class="nm">'+esc(it.nome)+'</span><span class="ds">'+esc(it.desc)+'</span><span class="ft"><span class="pr money">'+BRL(it.preco)+(it.de?'<small>'+BRL(it.de)+'</small>':"")+'</span><span class="add" aria-hidden="true">+</span></span></span>'+
+    '<span><span class="nm">'+esc(it.nome)+'</span><span class="ds">'+esc(it.desc)+'</span><span class="ft"><span class="pr money">'+BRL(it.preco)+(it.de?'<small>'+BRL(it.de)+'</small>':"")+'</span><span class="add"'+(it.g.length?' aria-hidden="true"':' data-quick="'+it.id+'" role="button" aria-label="Adicionar '+esc(it.nome)+'"')+'>+</span></span></span>'+
     '<span class="ph"><img src="'+IMG[it.img]+'" alt="" loading="lazy"></span></button>';
 }
 function comboHtml(it){
   var q=qtyOf(it.id), eco=it.de? Math.round((it.de-it.preco)*100)/100 : 0;
   return '<button type="button" class="combo'+(q?" in":"")+'" data-open="'+it.id+'">'+(eco?'<span class="eco">Economize '+BRL(eco)+'</span>':"")+'<span class="qb">'+q+'x</span><span class="ph"><img src="'+IMG[it.img]+'" alt="" loading="lazy"></span><span class="in"><span class="nm">'+esc(it.nome)+'</span><span class="ds">'+esc(it.desc)+'</span><span class="ft"><span class="pr money">'+BRL(it.preco)+'</span>'+(it.de?'<span class="sv">de '+BRL(it.de)+'</span>':"")+'</span></span></button>';
 }
+function lastOrderHtml(){
+  var last=ls("ldb-last"); if(!last||!last.length||cart.length||filtro) return "";
+  var names=last.map(function(l){ var it=item(l.id); return it? l.qty+"x "+it.nome : null; }).filter(Boolean);
+  if(!names.length) return "";
+  return '<section class="sec" id="cat-again" style="padding-top:18px"><div class="again"><div><span class="eyebrow">Bem-vindo de volta</span><b>Pedir de novo?</b><span>'+esc(names.join(" · "))+'</span></div><button type="button" class="btn btn-ghost" data-again style="width:auto">Repetir pedido</button></div></section>';
+}
 function renderMenu(){
-  var f=filtro.trim().toLowerCase(), html="", any=false;
+  var f=filtro.trim().toLowerCase(), html=lastOrderHtml(), any=false;
   CATS.forEach(function(c){
     var list=ITENS.filter(function(i){ return i.cat===c[0] && (!f || (i.nome+" "+i.desc).toLowerCase().indexOf(f)>=0); });
     if(!list.length) return; any=true;
@@ -498,9 +509,12 @@ function renderMenu(){
   $("#menu").innerHTML= any? html : '<div class="empty-search" style="display:block">Nada com <b>'+esc(filtro)+'</b> no cardápio. Tenta outro nome.</div>';
 }
 $("#cats").innerHTML=CATS.map(function(c,i){return '<button type="button" class="cat'+(i===0?" on":"")+'" data-cat="'+c[0]+'">'+c[1]+'</button>';}).join("");
-$("#cats").addEventListener("click",function(e){ var b=e.target.closest(".cat"); if(!b) return; var s=$("#cat-"+b.dataset.cat); if(s) s.scrollIntoView({behavior:"smooth",block:"start"}); });
-var secIO=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var id=en.target.id.replace("cat-",""); $$(".cat").forEach(function(b){ b.classList.toggle("on",b.dataset.cat===id); }); var on=$(".cat.on"); if(on) on.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"}); } }); },{rootMargin:"-40% 0px -55% 0px"});
-function observeSecs(){ $$(".sec").forEach(function(s){ secIO.observe(s); }); }
+var OFF=124, spyLock=0, spyLast="";
+function setCat(id){ if(id===spyLast) return; spyLast=id; $$(".cat").forEach(function(b){ b.classList.toggle("on",b.dataset.cat===id); }); var on=$(".cat.on"); if(on) on.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"}); }
+$("#cats").addEventListener("click",function(e){ var b=e.target.closest(".cat"); if(!b) return; var sec=$("#cat-"+b.dataset.cat); if(!sec) return; spyLock=Date.now()+1000; setCat(b.dataset.cat); window.scrollTo({top:sec.getBoundingClientRect().top+window.scrollY-OFF+1, behavior:"smooth"}); });
+function spy(){ if(Date.now()<spyLock) return; var secs=$$(".sec[id^='cat-']:not(#cat-again)"); if(!secs.length) return; var cur=secs[0]; secs.forEach(function(x){ if(x.getBoundingClientRect().top-OFF<=2) cur=x; }); setCat(cur.id.replace("cat-","")); }
+var spyT=null; window.addEventListener("scroll",function(){ if(spyT) return; spyT=requestAnimationFrame(function(){ spyT=null; spy(); }); },{passive:true});
+function observeSecs(){ spy(); }
 $("#q").addEventListener("input",function(){ filtro=this.value; renderMenu(); observeSecs(); });
 renderMenu(); observeSecs();
 
@@ -508,12 +522,14 @@ renderMenu(); observeSecs();
 function openSheet(id){ $("#"+id).classList.add("open"); document.body.style.overflow="hidden"; }
 function closeSheet(id){ $("#"+id).classList.remove("open"); if(!$(".sheet.open")) document.body.style.overflow=""; }
 document.addEventListener("click",function(e){
+  var qk=e.target.closest("[data-quick]"); if(qk){ e.stopPropagation(); quickAdd(qk.dataset.quick); var it=item(qk.dataset.quick); setTimeout(function(){ upsell(it); },250); return; }
   var c=e.target.closest("[data-close]"); if(c){ closeSheet(c.closest(".sheet").id); return; }
   var o=e.target.closest("[data-open]"); if(o){ openItem(o.dataset.open); return; }
   var up=e.target.closest("[data-upadd]"); if(up){ quickAdd(up.dataset.upadd); up.textContent="Adicionado ✓"; up.classList.add("ok"); up.disabled=true; return; }
   var upc=e.target.closest("[data-upcustom]"); if(upc){ closeSheet("shUp"); openItem(upc.dataset.upcustom); return; }
   var inc=e.target.closest("[data-inc]"); if(inc){ changeQty(inc.dataset.inc,+inc.dataset.d); return; }
   var rm=e.target.closest("[data-rm]"); if(rm){ cart=cart.filter(function(l){return l.uid!==rm.dataset.rm;}); saveCart(); return; }
+  if(e.target.closest("[data-again]")){ var last=ls("ldb-last")||[]; cart=last.filter(function(l){return item(l.id);}).map(function(l){ l.uid="u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5); return l; }); saveCart(); toast("Pedido anterior de volta no carrinho"); return; }
   if(e.target.closest("#barBtn")){ renderCart(); openSheet("shCart"); return; }
   if(e.target.closest("[data-checkout]")){ startCheckout(); return; }
 });
@@ -662,7 +678,7 @@ function send(){
   var t=totals(), num=nextNum(true), msg=buildMsg(num,t); readFields();
   var url="https://wa.me/"+LOJA.wa+"?text="+encodeURIComponent(msg);
   window.open(url,"_blank","noopener");
-  cart=[]; cupom=null; ls("ldb-cart",cart); ls("ldb-cupom",null); renderCart(); renderMenu(); observeSecs();
+  ls("ldb-last",cart); cart=[]; cupom=null; ls("ldb-cart",cart); ls("ldb-cupom",null); renderCart(); renderMenu(); observeSecs();
   $("#ckBody").innerHTML='<div class="pn-h"><span></span><button class="close" data-close aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="sent"><div class="ok"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></div><h3>Pedido '+num+' pronto!</h3><p>O WhatsApp abriu com a mensagem montada. É só apertar <b>enviar</b> lá e aguardar a confirmação da lancheria.</p><p style="margin-top:14px"><a class="btn btn-wa" href="'+url+'" target="_blank" rel="noopener">Não abriu? Toque aqui</a></p></div>';
 }
 renderCart();
