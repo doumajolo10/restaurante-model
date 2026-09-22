@@ -13,9 +13,105 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23FF5A1F'/%3E%3Cpath fill='%23fff' d='M12 3c1 3.5 4.5 5 4.5 9.5A4.5 4.5 0 0 1 12 17a4.5 4.5 0 0 1-4.5-4.5C7.5 10 9 8.8 9.5 7c1 1.2 1.5 2.3 1.5 3.5C12.5 8.5 12.5 6 12 3z'/%3E%3C/svg%3E">
 <title>Lancheria do Bairro</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+
+<link rel="preload" href="fonts/IBMPlexMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/IBMPlexMono-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/PlusJakartaSans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/PlusJakartaSans-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/Unbounded-600.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:url("fonts/IBMPlexMono-400.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+font-display:optional}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:url("fonts/IBMPlexMono-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:url("fonts/PlusJakartaSans-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src:url("fonts/PlusJakartaSans-500.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:url("fonts/PlusJakartaSans-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src:url("fonts/PlusJakartaSans-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src:url("fonts/PlusJakartaSans-800.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src:url("fonts/Unbounded-600.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src:url("fonts/Unbounded-800.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+font-display:optional}
+
+/* ===== MASCARA ===== */
+.mask-rv{clip-path:inset(0 0 100% 0);transform:scale(1.07);transition:clip-path 1s cubic-bezier(.22,.7,.2,1),transform 1.25s cubic-bezier(.22,.7,.2,1)}
+.mask-rv.on{clip-path:inset(0 0 0 0);transform:scale(1)}
+.brilho-wrap{position:relative;overflow:hidden}
+.brilho-wrap::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(100deg,transparent 42%,rgba(255,255,255,.28) 50%,transparent 58%);opacity:0;transform:translateX(-32%)}
+.brilho-wrap.brilha::after{animation:brilhoPassa 1.15s cubic-bezier(.3,.6,.2,1) both}
+@keyframes brilhoPassa{0%{opacity:0;transform:translateX(-35%)}25%{opacity:1}100%{opacity:0;transform:translateX(35%)}}
+
+
+/* ===== LEVE ===== */
+html.lite .rv,html.lite [data-rv]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+html.lite .mask-rv{clip-path:none!important;transform:none!important;transition:none!important}
+html.lite [class*="float"],html.lite .nav,html.lite header{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.lite .marq,html.lite .marquee,html.lite [class*="pulse"],html.lite [class*="spin"]{animation:none!important}
+html.lite section{content-visibility:auto;contain-intrinsic-size:auto 900px}
+html.lite .hero{content-visibility:visible}
+
+</style>
 <style>
 :root{
   --bg:#14100E; --bg2:#1B1512; --sur:#241C18; --sur2:#2E2420; --line:#3A2E28; --line2:#4A3B33;
@@ -335,25 +431,16 @@ footer{margin-top:40px; border-top:1px solid var(--line); background:var(--bg2);
 @media (hover:hover){.it:hover .ph img,.combo:hover .ph img{transform:scale(1.07)}}
 
 
-/* ===== MASCARA ===== */
-.mask-rv{clip-path:inset(0 0 100% 0);transform:scale(1.07);transition:clip-path 1s cubic-bezier(.22,.7,.2,1),transform 1.25s cubic-bezier(.22,.7,.2,1)}
-.mask-rv.on{clip-path:inset(0 0 0 0);transform:scale(1)}
-.brilho-wrap{position:relative;overflow:hidden}
-.brilho-wrap::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(100deg,transparent 42%,rgba(255,255,255,.28) 50%,transparent 58%);opacity:0;transform:translateX(-32%)}
-.brilho-wrap.brilha::after{animation:brilhoPassa 1.15s cubic-bezier(.3,.6,.2,1) both}
-@keyframes brilhoPassa{0%{opacity:0;transform:translateX(-35%)}25%{opacity:1}100%{opacity:0;transform:translateX(35%)}}
-
-
-/* ===== LEVE ===== */
-html.lite .rv,html.lite [data-rv]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
-html.lite .mask-rv{clip-path:none!important;transform:none!important;transition:none!important}
-html.lite [class*="float"],html.lite .nav,html.lite header{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-html.lite .marq,html.lite .marquee,html.lite [class*="pulse"],html.lite [class*="spin"]{animation:none!important}
-html.lite section{content-visibility:auto;contain-intrinsic-size:auto 900px}
-html.lite .hero{content-visibility:visible}
+/* ===== CONTRASTE ===== */
+.cat.on{background:#D8410E!important;color:#fff!important}
+.credits{color:#a2938a!important}
+.credits a{color:#c9b8ad!important}
+@media (max-width:760px){.credits,.small,.hint{font-size:12.5px!important}}
 
 </style>
 <link rel="canonical" href="https://restaurante-model-wheat.vercel.app/">
+<link rel="preload" as="image" href="img/topo-1-480.webp" imagesrcset="img/topo-1-480.webp 480w" imagesizes="(max-width:900px) 92vw, 620px" fetchpriority="high">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"Lancheria do Bairro","url":"https://restaurante-model-wheat.vercel.app/","image":"https://restaurante-model-wheat.vercel.app/og.jpg","servesCuisine":["Hamburguer","Pizza","Porções"],"priceRange":"$","telephone":"+55 55 99624-1177","acceptsReservations":false,"address":{"@type":"PostalAddress","addressLocality":"São Martinho","addressRegion":"RS","addressCountry":"BR"},"potentialAction":{"@type":"OrderAction","target":"https://restaurante-model-wheat.vercel.app/"}}</script>
 </head>
 <body>
 
